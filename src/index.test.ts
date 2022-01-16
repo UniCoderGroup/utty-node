@@ -1,9 +1,26 @@
-import UStdTty, { StdTty } from "./index";
-
-class FakeStdTty implements StdTty {
+import UNodeTty, { NodeLikeTty } from "./index";
+class FakeNodeTty implements NodeLikeTty {
   lines: string[] = [""];
   y = 0;
   x = 0;
+  resizeListeners: (() => void)[] = [];
+  _columns: number = 100;
+  set columns(col: number) {
+    this._columns = col;
+    this.resizeListeners.forEach((value) => value());
+  }
+  _rows: number = 100;
+  set rows(row: number) {
+    this._rows = row;
+    this.resizeListeners.forEach((value) => value());
+  }
+  on(_event: "resize", listener: () => void): this {
+    this.resizeListeners.push(listener);
+    return this;
+  }
+  getColorDepth(): number {
+    return 24;
+  }
   write(buffer: Uint8Array | string, cb?: (err?: Error) => void): boolean {
     for (let c of buffer) {
       if (c === "\n") {
@@ -33,11 +50,12 @@ class FakeStdTty implements StdTty {
     return true;
   }
 }
-const fake = new FakeStdTty();
-const t = new UStdTty(fake);
+
+const fake = new FakeNodeTty();
+const t = new UNodeTty(fake);
 let lines: string[] = [];
 
-describe("Test UStdTty", () => {
+describe("Test UNodeTty", () => {
   it("should be able to push line correctly", () => {
     for (let i = 0; i < 10; i++) {
       t.pushLine("L" + i);
@@ -57,5 +75,14 @@ describe("Test UStdTty", () => {
     t.clearLine(4);
     lines[4] = "";
     expect(fake.lines).toEqual(lines);
+  });
+  it("should be able to be resized correctly", () => {
+    let called = false;
+    let fn = () => {
+      called = true;
+    };
+    t.onResize(fn);
+    fake.rows++;
+    expect(called).toBeTruthy();
   });
 });
