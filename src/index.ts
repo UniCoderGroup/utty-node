@@ -1,6 +1,6 @@
 import UTty from "utty";
 import stripAnsi from "strip-ansi";
-import NodeLikeTty ,{ Direction } from "nodeliketty";
+import NodeLikeTty from "nodeliketty";
 
 export default class UNodeTty implements UTty {
   constructor(tty: NodeLikeTty) {

@@ -38,6 +38,7 @@
   "dependencies": {
     "@types/node": "^17.0.8",
     "nodeliketty": "^1.0.2",
+    "nodeliketty-testimpl": "^1.0.0",
     "strip-ansi": "^7.0.1",
     "utty": "^1.0.0"
   },
