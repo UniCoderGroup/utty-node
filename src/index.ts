@@ -1,6 +1,6 @@
 import UTty from "utty";
 import stripAnsi from "strip-ansi";
-import NodeLikeTty from "nodeliketty";
+import NodeLikeTty, { Direction } from "nodeliketty";
 
 export default class UNodeTty implements UTty {
   constructor(tty: NodeLikeTty) {
@@ -44,7 +44,7 @@ export default class UNodeTty implements UTty {
     if (add) this.nLine += dLine;
   }
 
-  _clearLine(dir: -1 | 0 | 1 = 0): void {
+  _clearLine(dir: Direction = 0): void {
     this.tty.clearLine(dir);
   }
 
@@ -100,6 +100,12 @@ export default class UNodeTty implements UTty {
   pushLine(str: string): void {
     this._toNewLine();
     this._write(str + "\n", true);
+  }
+
+  popLine():void{
+    this.nLine--;
+    this._toNewLine();
+    this._clearLine();
   }
 
   getStrDisplayWidth(str: string): number {

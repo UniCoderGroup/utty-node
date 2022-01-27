@@ -26,6 +26,14 @@ describe("Test UNodeTty", () => {
     lines[4] = "";
     expect(fake.lines).toEqual(lines);
   });
+  it("should be able to pop a line correctly",()=>{
+    t.popLine();
+    lines.pop();
+    lines.pop();
+    lines.push("");
+    lines.push("");
+    expect(fake.lines).toEqual(lines);
+  });
   it("should be able to be resized correctly", () => {
     let called = false;
     let fn = () => {
