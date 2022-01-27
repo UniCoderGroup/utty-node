@@ -6,7 +6,6 @@
   "types": "build/index.d.ts",
   "type": "module",
   "scripts": {
-    "dev": "cross-env TS_NODE_PROJECT=tsconfig.json node-dev --respawn --deps=-1 --clear src/test.ts",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage",
     "build": "tsc"
   },
