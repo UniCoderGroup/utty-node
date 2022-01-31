@@ -26,7 +26,7 @@ describe("Test UNodeTty", () => {
     lines[4] = "";
     expect(fake.lines).toEqual(lines);
   });
-  it("should be able to pop a line correctly",()=>{
+  it("should be able to pop a line correctly", () => {
     t.popLine();
     lines.pop();
     lines.pop();
@@ -40,7 +40,9 @@ describe("Test UNodeTty", () => {
       called = true;
     };
     t.onResize(fn);
+    const originRows = fake.rows;
     fake.rows++;
+    expect(t.rows + 1).toBe(originRows + 1);
     expect(called).toBeTruthy();
   });
 });

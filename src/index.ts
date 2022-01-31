@@ -82,6 +82,14 @@ export default class UNodeTty implements UTty {
     this._toLine(this.nLine);
   }
 
+  get columns(): number{
+    return this.tty.columns;
+  }
+
+  get rows(): number{
+    return this.tty.rows;
+  }
+
   replace(line: number, str: string): void {
     this._toLine(line);
     this._replace(str);
