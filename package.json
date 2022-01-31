@@ -1,6 +1,6 @@
 {
   "name": "utty-node",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "An impl of utty for nodejs tty.",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -39,7 +39,7 @@
     "@types/node": "^17.0.13",
     "nodeliketty": "^1.0.4",
     "strip-ansi": "^7.0.1",
-    "utty": "^1.0.1"
+    "utty": "^1.0.2"
   },
   "jest": {
     "extensionsToTreatAsEsm": [

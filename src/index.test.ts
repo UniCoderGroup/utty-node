@@ -42,7 +42,7 @@ describe("Test UNodeTty", () => {
     t.onResize(fn);
     const originRows = fake.rows;
     fake.rows++;
-    expect(t.rows + 1).toBe(originRows + 1);
+    expect(t.rows).toBe(originRows + 1);
     expect(called).toBeTruthy();
   });
 });
