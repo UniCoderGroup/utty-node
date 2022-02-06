@@ -6,7 +6,7 @@
   "types": "build/index.d.ts",
   "type": "module",
   "scripts": {
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+    "test": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --trace-warnings\" jest --coverage",
     "build": "tsc"
   },
   "repository": {
@@ -27,6 +27,7 @@
     "@babel/core": "7.16.12",
     "@babel/plugin-transform-typescript": "7.16.8",
     "@babel/preset-env": "7.16.11",
+    "@babel/preset-typescript": "^7.16.7",
     "@types/jest": "27.4.0",
     "cross-env": "7.0.3",
     "jest": "27.4.7",
@@ -37,6 +38,7 @@
   },
   "dependencies": {
     "@types/node": "^17.0.13",
+    "chalk": "^5.0.0",
     "nodeliketty": "^1.0.4",
     "strip-ansi": "^7.0.1",
     "utty": "^1.0.2"

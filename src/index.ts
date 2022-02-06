@@ -1,12 +1,56 @@
-import UTty from "utty";
+import UTty, { LineContext, UTtyConfig } from "utty";
 import stripAnsi from "strip-ansi";
 import NodeLikeTty, { Direction } from "nodeliketty";
+import chalk, { Color, ChalkInstance } from "chalk";
+
+const color2chalk = new Map<Color, ChalkInstance>([
+  ["black", chalk.black],
+  ["red", chalk.red],
+  ["green", chalk.green],
+  ["yellow", chalk.yellow],
+  ["blue", chalk.blue],
+  ["magenta", chalk.magenta],
+  ["cyan", chalk.cyan],
+  ["white", chalk.white],
+  ["gray", chalk.gray],
+  ["grey", chalk.grey],
+  ["blackBright", chalk.blackBright],
+  ["redBright", chalk.redBright],
+  ["greenBright", chalk.greenBright],
+  ["yellowBright", chalk.yellowBright],
+  ["blueBright", chalk.blueBright],
+  ["magentaBright", chalk.magentaBright],
+  ["cyanBright", chalk.cyanBright],
+  ["whiteBright", chalk.whiteBright],
+  ["bgBlack", chalk.bgBlack],
+  ["bgRed", chalk.bgRed],
+  ["bgGreen", chalk.bgGreen],
+  ["bgYellow", chalk.bgYellow],
+  ["bgBlue", chalk.bgBlue],
+  ["bgMagenta", chalk.bgMagenta],
+  ["bgCyan", chalk.bgCyan],
+  ["bgWhite", chalk.bgWhite],
+  ["bgGray", chalk.bgGray],
+  ["bgGrey", chalk.bgGrey],
+  ["bgBlackBright", chalk.bgBlackBright],
+  ["bgRedBright", chalk.bgRedBright],
+  ["bgGreenBright", chalk.bgGreenBright],
+  ["bgYellowBright", chalk.bgYellowBright],
+  ["bgBlueBright", chalk.bgBlackBright],
+  ["bgMagentaBright", chalk.bgMagentaBright],
+  ["bgCyanBright", chalk.bgCyanBright],
+  ["bgWhiteBright", chalk.bgWhiteBright],
+]);
 
 export default class UNodeTty implements UTty {
   constructor(tty: NodeLikeTty) {
     this.tty = tty;
-    process.env;
+    this.config = {
+      color: "NJS:" + tty.getColorDepth(),
+    };
   }
+
+  config: UTtyConfig;
 
   /**
    * The node lick tty.
@@ -82,11 +126,33 @@ export default class UNodeTty implements UTty {
     this._toLine(this.nLine);
   }
 
-  get columns(): number{
+  _resolve(str: string, ctx: LineContext): string {
+    let result = "";
+
+    // Resolve colors.
+    const colors = ctx["colors"] as
+      | Array<{
+          name: string;
+          start: string;
+          end: string;
+        }>
+      | undefined;
+    if (colors !== undefined) {
+      for (let color of colors) {
+        const c = color2chalk.get(color.name as Color);
+        if (c === undefined) {
+          throw new Error("Unknown color name!");
+        }
+      }
+    }
+    return result;
+  }
+
+  get columns(): number {
     return this.tty.columns;
   }
 
-  get rows(): number{
+  get rows(): number {
     return this.tty.rows;
   }
 
@@ -105,12 +171,12 @@ export default class UNodeTty implements UTty {
     this._clearLine(dir);
   }
 
-  pushLine(str: string): void {
+  pushLine(str: string, ctx: LineContext): void {
     this._toNewLine();
-    this._write(str + "\n", true);
+    this._write(this._resolve(str, ctx) + "\n", true);
   }
 
-  popLine():void{
+  popLine(): void {
     this.nLine--;
     this._toNewLine();
     this._clearLine();
