@@ -1,5 +1,6 @@
-import UNodeTty from "./index";
+import UNodeTty from "../index";
 import TestImpl from "nodeliketty-testimpl";
+import chalk from "chalk";
 
 const fake = new TestImpl();
 const t = new UNodeTty(fake);
@@ -34,7 +35,7 @@ describe("Test UNodeTty", () => {
     lines.push("");
     expect(fake.lines).toEqual(lines);
   });
-  it("should be able to be resized correctly", () => {
+  it("should be able to be resized correctly (rows)", () => {
     let called = false;
     let fn = () => {
       called = true;
@@ -44,5 +45,25 @@ describe("Test UNodeTty", () => {
     fake.rows++;
     expect(t.rows).toBe(originRows + 1);
     expect(called).toBeTruthy();
+  });
+  it("should be able to be resized correctly (columns)", () => {
+    let called = false;
+    let fn = () => {
+      called = true;
+    };
+    t.onResize(fn);
+    const originColumns = fake.columns;
+    fake.columns++;
+    expect(t.columns).toBe(originColumns + 1);
+    expect(called).toBeTruthy();
+  });
+  it("should be able to calculate the display width of an ansi-styled string", () => {
+    const str = "ANSI-STYLED STRING";
+    expect(t.getStrDisplayWidth(chalk.bgBlue.italic(str))).toBe(str.length);
+  });
+  it("should be able to move to a line", () => {
+    const line = 3;
+    t.moveToLine(line);
+    expect(fake.y).toBe(line);
   });
 });

@@ -6,7 +6,7 @@
   "types": "build/index.d.ts",
   "type": "module",
   "scripts": {
-    "test": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --trace-warnings\" jest --coverage",
+    "test": "cross-env NODE_OPTIONS=\"--experimental-vm-modules\" jest --coverage",
     "build": "tsc"
   },
   "repository": {
@@ -50,6 +50,11 @@
     "testPathIgnorePatterns": [
       "<rootDir>/build/",
       "<rootDir>/node_modules/"
-    ]
+    ],
+    "moduleNameMapper": {
+      "chalk": "chalk/source/index.js",
+      "#ansi-styles": "chalk/source/vendor/ansi-styles/index.js",
+      "#supports-color": "chalk/source/vendor/supports-color/index.js"
+    }
   }
 }

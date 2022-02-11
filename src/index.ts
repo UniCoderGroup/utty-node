@@ -127,21 +127,23 @@ export default class UNodeTty implements UTty {
   }
 
   _resolve(str: string, ctx: LineContext): string {
-    let result = "";
+    let result = str;
 
-    // Resolve colors.
-    const colors = ctx["colors"] as
-      | Array<{
-          name: string;
-          start: string;
-          end: string;
-        }>
-      | undefined;
-    if (colors !== undefined) {
-      for (let color of colors) {
-        const c = color2chalk.get(color.name as Color);
-        if (c === undefined) {
-          throw new Error("Unknown color name!");
+    if (ctx["colors"] !== undefined) {
+      // Resolve colors.
+      const colors = ctx["colors"] as
+        | Array<{
+            name: string;
+            start: string;
+            end: string;
+          }>
+        | undefined;
+      if (colors !== undefined) {
+        for (let color of colors) {
+          const c = color2chalk.get(color.name as Color);
+          if (c === undefined) {
+            throw new Error("Unknown color name!");
+          }
         }
       }
     }
@@ -171,7 +173,7 @@ export default class UNodeTty implements UTty {
     this._clearLine(dir);
   }
 
-  pushLine(str: string, ctx: LineContext): void {
+  pushLine(str: string, ctx: LineContext = {}): void {
     this._toNewLine();
     this._write(this._resolve(str, ctx) + "\n", true);
   }
